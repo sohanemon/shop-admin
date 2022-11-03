@@ -1,11 +1,11 @@
-import logo from "./logo.svg";
+import { RouterProvider } from "react-router-dom";
 import "./App.css";
+import { router } from "./routes/router";
 
 function App() {
   return (
     <div>
-      <button className='btn'> button</button>
-      <button className=' btn btn-primary rounded-none px-16'>Two</button>
+      <RouterProvider router={router} />
     </div>
   );
 }
