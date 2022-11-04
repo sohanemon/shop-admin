@@ -13,12 +13,29 @@ try {
   (() => {
     // iife: immediately invoked function expression
     app.get("/", (req, res) => {
-      res.send("Data");
+      res.send("Data is comming");
+    });
+
+    app.get("/get", async (req, res) => {
+      const cursor = collection.find({});
+      const data = await cursor.toArray();
+      res.send(data);
     });
     app.post("/post", async (req, res) => {
       const doc = req.body;
+      console.log(doc);
       const result = await collection.insertOne(doc);
       res.send(result.insertedId);
+    });
+    app.delete("/delete", async (req, res) => {
+      await collection.deleteMany({});
+      res.send("deleted all");
+    });
+    app.get("/:_id", async (req, res) => {
+      const result = await collection.findOne({
+        _id: mongodb.ObjectId(req.params._id),
+      });
+      res.send(result);
     });
   })();
 } catch (error) {

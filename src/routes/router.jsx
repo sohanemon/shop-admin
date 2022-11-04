@@ -16,6 +16,10 @@ export const router = createBrowserRouter([
         path: "/add",
         element: <AddProduct />,
       },
+      {
+        path: "/modify/:_id",
+        element: <AddProduct modify={true} />,
+      },
     ],
   },
 ]);
