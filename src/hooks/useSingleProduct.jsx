@@ -9,7 +9,7 @@ const useSingleProduct = (_id) => {
         .get(`${process.env.REACT_APP_HOST}/${_id}`)
         .then((res) => setProduct(res.data));
     return () => {};
-  }, []);
+  }, [_id]);
   return product;
 };
 
