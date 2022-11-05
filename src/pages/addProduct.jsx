@@ -6,7 +6,7 @@ import useSingleProduct from "../hooks/useSingleProduct";
 const AddProduct = ({ modify }) => {
   const params = useParams();
   const product = useSingleProduct(params._id);
-  // console.log(product);
+  console.log(product);
   const {
     register,
     handleSubmit,
@@ -14,8 +14,20 @@ const AddProduct = ({ modify }) => {
   } = useForm();
   const onSubmit = (data) => {
     console.log(data);
+    if (modify)
+      axios
+        .put(`${process.env.REACT_APP_HOST}/put/${params._id}`, data)
+        .then((res) => console.log(res.data));
+    else
+      axios
+        .post(`${process.env.REACT_APP_HOST}/post`, data)
+        .then((res) => console.log(res.data));
+  };
+  const handleDelete = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     axios
-      .post(`${process.env.REACT_APP_HOST}/post`, data)
+      .delete(`${process.env.REACT_APP_HOST}/delete/${params._id}`)
       .then((res) => console.log(res.data));
   };
 
@@ -33,7 +45,10 @@ const AddProduct = ({ modify }) => {
             <span className='label-text'>Product name</span>
           </label>
           <input
-            {...register("title", { required: "* Title is required" })}
+            defaultValue={product?.title}
+            {...register("title", {
+              required: !modify && "* Title is required",
+            })}
             type='text'
             placeholder='Iphone'
             className='input input-bordered'
@@ -47,7 +62,10 @@ const AddProduct = ({ modify }) => {
             <span className='label-text'>Price</span>
           </label>
           <input
-            {...register("price", { required: "* Price is required" })}
+            defaultValue={product?.price}
+            {...register("price", {
+              required: !modify && "* Price is required",
+            })}
             type='text'
             placeholder='2300'
             className='input input-bordered'
@@ -61,8 +79,9 @@ const AddProduct = ({ modify }) => {
             <span className='label-text'>Manufacturer</span>
           </label>
           <input
+            defaultValue={product?.manufacturer}
             {...register("manufacturer", {
-              required: "* Manufacturer is required",
+              required: !modify && "* Manufacturer is required",
             })}
             type='text'
             placeholder='Apple Inc.'
@@ -80,7 +99,10 @@ const AddProduct = ({ modify }) => {
             <span className='label-text'>Photo URL</span>
           </label>
           <input
-            {...register("photoURL", { required: "* PhotoURL is recommended" })}
+            defaultValue={product?.photoURL}
+            {...register("photoURL", {
+              required: !modify && "* PhotoURL is recommended",
+            })}
             type='text'
             placeholder='https://imgur.com/dkf3fj'
             className='input input-bordered'
@@ -96,6 +118,11 @@ const AddProduct = ({ modify }) => {
           <button className='btn btn-primary'>
             {modify ? "Update" : "Submit"}
           </button>
+          {modify && (
+            <button onClick={handleDelete} className='btn btn-error mt-4'>
+              Delete
+            </button>
+          )}
         </div>
       </form>
     </>

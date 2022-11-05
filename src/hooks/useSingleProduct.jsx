@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 const useSingleProduct = (_id) => {
   const [product, setProduct] = useState({});
   useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_HOST}/${_id}`)
-      .then((res) => console.log(res.data));
+    if (_id)
+      axios
+        .get(`${process.env.REACT_APP_HOST}/${_id}`)
+        .then((res) => setProduct(res.data));
     return () => {};
   }, []);
   return product;

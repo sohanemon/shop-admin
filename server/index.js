@@ -23,13 +23,28 @@ try {
     });
     app.post("/post", async (req, res) => {
       const doc = req.body;
-      console.log(doc);
+
       const result = await collection.insertOne(doc);
+      res.send(result.insertedId);
+    });
+    app.put("/put/:_id", async (req, res) => {
+      const doc = req.body;
+
+      const result = await collection.updateOne(
+        { _id: mongodb.ObjectId(req.params._id) },
+        {
+          $set: doc,
+        }
+      );
       res.send(result.insertedId);
     });
     app.delete("/delete", async (req, res) => {
       await collection.deleteMany({});
       res.send("deleted all");
+    });
+    app.delete("/delete/:_id", async (req, res) => {
+      await collection.deleteOne({ _id: req.params._id });
+      res.send("deleted");
     });
     app.get("/:_id", async (req, res) => {
       const result = await collection.findOne({
