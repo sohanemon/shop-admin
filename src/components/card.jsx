@@ -13,7 +13,7 @@ const Card = ({ title, price, manufacturer, photoURL, _id }) => {
         </figure>
         <div className='card-body'>
           <h2 className='card-title text-2xl'>{title}</h2>
-          <p>Current price: {price}</p>
+          <p>Current price: ${price}</p>
           <p>Manufacturer: {manufacturer}</p>
           <div className='card-actions justify-end'>
             <Link to={`modify/${_id}`}>

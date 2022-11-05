@@ -43,7 +43,7 @@ try {
       res.send("deleted all");
     });
     app.delete("/delete/:_id", async (req, res) => {
-      await collection.deleteOne({ _id: req.params._id });
+      await collection.deleteOne({ _id: mongodb.ObjectId(req.params._id) });
       res.send("deleted");
     });
     app.get("/:_id", async (req, res) => {

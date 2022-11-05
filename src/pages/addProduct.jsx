@@ -1,34 +1,38 @@
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useNavigate, useParams } from "react-router-dom";
 import useSingleProduct from "../hooks/useSingleProduct";
 
 const AddProduct = ({ modify }) => {
   const params = useParams();
+  const navigate = useNavigate();
   const product = useSingleProduct(params._id);
-  console.log(product);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
-    console.log(data);
     if (modify)
       axios
         .put(`${process.env.REACT_APP_HOST}/put/${params._id}`, data)
-        .then((res) => console.log(res.data));
+        .then((res) => toast.success("Data updated successfully"));
     else
-      axios
-        .post(`${process.env.REACT_APP_HOST}/post`, data)
-        .then((res) => console.log(res.data));
+      axios.post(`${process.env.REACT_APP_HOST}/post`, data).then((res) => {
+        toast.success("Data added successfully");
+      });
   };
   const handleDelete = (e) => {
     e.preventDefault();
     e.stopPropagation();
     axios
       .delete(`${process.env.REACT_APP_HOST}/delete/${params._id}`)
-      .then((res) => console.log(res.data));
+      .then((res) => {
+        toast.success("Data deleted successfully");
+        navigate("/");
+      });
   };
 
   return (
@@ -47,7 +51,7 @@ const AddProduct = ({ modify }) => {
           <input
             defaultValue={product?.title}
             {...register("title", {
-              required: !modify && "* Title is required",
+              required: "* Title is required",
             })}
             type='text'
             placeholder='Iphone'
@@ -64,7 +68,7 @@ const AddProduct = ({ modify }) => {
           <input
             defaultValue={product?.price}
             {...register("price", {
-              required: !modify && "* Price is required",
+              required: "* Price is required",
             })}
             type='text'
             placeholder='2300'
@@ -81,7 +85,7 @@ const AddProduct = ({ modify }) => {
           <input
             defaultValue={product?.manufacturer}
             {...register("manufacturer", {
-              required: !modify && "* Manufacturer is required",
+              required: "* Manufacturer is required",
             })}
             type='text'
             placeholder='Apple Inc.'
@@ -101,7 +105,7 @@ const AddProduct = ({ modify }) => {
           <input
             defaultValue={product?.photoURL}
             {...register("photoURL", {
-              required: !modify && "* PhotoURL is recommended",
+              required: "* PhotoURL is recommended",
             })}
             type='text'
             placeholder='https://imgur.com/dkf3fj'
